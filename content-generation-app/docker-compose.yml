@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  localai:
+    image: ghcr.io/go-skynet/LocalAI/localai:latest
+    container_name: localai
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # Set an API key to require auth when using LocalAI. If omitted, the
+      # container may accept requests without a key depending on the image
+  # flags. Use the same value for LOCALAI_API_KEY or AI_API_KEY in the app.
+      - LOCALAI_API_KEY=${LOCALAI_API_KEY:-localai}
+    volumes:
+      # Put your GGML model files into ./models (relative to this file)
+      - ./models:/usr/share/localai/models
+    command: ["--http-port", "8080", "--listen-host", "0.0.0.0", "--model-dir", "/usr/share/localai/models", "--api-key", "${LOCALAI_API_KEY:-localai}"]
