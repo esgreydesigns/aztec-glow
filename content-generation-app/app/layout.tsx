@@ -19,8 +19,8 @@ const dmSans = DM_Sans({
 })
 
 export const metadata: Metadata = {
-  title: "ContentCraft AI - Advanced Content Generation",
-  description: "Create all kinds of content with AI-powered generation",
+  title: "Acrylic Alchemy - Content Creation Studio",
+  description: "Create and manage content across multiple categories with our modern content creation platform",
   generator: "v0.app",
 }
 

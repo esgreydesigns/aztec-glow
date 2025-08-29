@@ -1,0 +1,21 @@
+{
+  "m3_agent": {
+    "path": "../m3-agent-master/m3-agent-master",
+    "control_script": "m3_agent/control.py",
+    "python_executable": "python3",
+    "timeout": 30000,
+    "memory_enabled": true,
+    "multimodal_enabled": true
+  },
+  "content_generation": {
+    "default_mode": "smart",
+    "fallback_enabled": true,
+    "max_processing_time": 30000,
+    "memory_integration": true
+  },
+  "logging": {
+    "level": "info",
+    "file": "logs/m3-agent.log",
+    "console": true
+  }
+}

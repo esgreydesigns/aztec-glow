@@ -26,29 +26,14 @@ export function ContentGenerator() {
     setGeneratedContent("")
 
     try {
-      const response = await fetch("/api/generate-content", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          productType,
-          prompt,
-          targetAudience,
-          mode: generationMode,
-          context: smartContext,
-        }),
-      })
+      // Simulate content generation delay
+      await new Promise(resolve => setTimeout(resolve, 2000))
 
-      const data = await response.json()
-
-      if (data.success) {
-        setGeneratedContent(data.content)
-      } else {
-        setError(data.error || "Generation failed")
-      }
+      // Generate sample content based on product type
+      const sampleContent = generateSampleContent(productType, prompt, targetAudience)
+      setGeneratedContent(sampleContent)
     } catch (err) {
-      setError("Network error occurred")
+      setError("Content generation failed")
       console.error("Generation error:", err)
     } finally {
       setIsGenerating(false)
@@ -73,6 +58,332 @@ export function ContentGenerator() {
     a.click()
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
+  }
+
+  // Helper function for content generation
+  const generateSampleContent = (productType: string, prompt: string, targetAudience: string): string => {
+    const templates = {
+      "prompt-guide": `# AI Prompt Engineering Guide
+
+## Target Audience: ${targetAudience}
+
+## Overview
+This comprehensive guide teaches effective prompt engineering techniques for ${prompt}.
+
+## Key Chapters
+
+### Chapter 1: Understanding AI Models
+- How language models work
+- Different model capabilities
+- Choosing the right model for your needs
+
+### Chapter 2: Basic Prompt Structure
+- Clear instructions and context
+- Specific formatting requirements
+- Examples and templates
+
+### Chapter 3: Advanced Techniques
+- Chain of thought prompting
+- Few-shot learning examples
+- Role-playing and persona prompts
+
+### Chapter 4: Industry Applications
+- Content creation and marketing
+- Technical writing and documentation
+- Creative writing and storytelling
+
+### Chapter 5: Best Practices
+- Testing and iteration
+- Avoiding common pitfalls
+- Measuring prompt effectiveness
+
+## Resources Included
+- 50+ prompt templates
+- Case studies and examples
+- Testing frameworks
+- Performance tracking sheets
+
+## Pricing Strategy
+- PDF Download: $27
+- Bundle with video course: $97
+- Enterprise licensing available`,
+
+      "template-pack": `# Professional Template Collection
+
+## Target Audience: ${targetAudience}
+
+## Template Categories
+
+### Business Templates
+- Business plan templates
+- Financial projections
+- Marketing strategy documents
+- Project management templates
+
+### Creative Templates
+- Social media content calendars
+- Blog post templates
+- Email newsletter templates
+- Presentation slide decks
+
+### Technical Templates
+- API documentation templates
+- Code review checklists
+- System architecture diagrams
+- Testing strategy templates
+
+## Key Features
+- **Customizable**: Easy to modify for your needs
+- **Professional Design**: Modern, clean layouts
+- **Multiple Formats**: Word, Google Docs, PDF
+- **Brand Integration**: Spaces for logo and colors
+
+## Package Contents
+- 25+ professional templates
+- Design customization guide
+- Usage instructions
+- Brand integration examples
+
+## Value Proposition
+Save 10+ hours per week on document creation while maintaining professional standards.`,
+
+      "micro-report": `# Market Intelligence Micro-Report
+
+## Topic: ${prompt}
+## Target Audience: ${targetAudience}
+
+## Executive Summary
+This concise report provides actionable insights on current market trends and opportunities.
+
+## Key Findings
+1. **Market Size**: Current market valuation and growth projections
+2. **Competitive Landscape**: Major players and market share distribution
+3. **Consumer Trends**: Emerging preferences and behavior patterns
+4. **Technology Impact**: How new technologies are reshaping the industry
+
+## Strategic Recommendations
+- Short-term opportunities (3-6 months)
+- Medium-term strategies (6-18 months)
+- Long-term positioning (18+ months)
+
+## Data Sources
+- Primary research and surveys
+- Industry reports and analysis
+- Competitor monitoring
+- Consumer behavior studies
+
+## Next Steps
+1. Schedule strategy review meeting
+2. Assign action items to team members
+3. Set up monitoring and tracking systems
+4. Plan follow-up research initiatives
+
+## About This Report
+- **Length**: 5-7 pages
+- **Format**: PDF with interactive elements
+- **Updates**: Quarterly refresh cycle
+- **Price**: $47 per report`,
+
+      "checklist": `# Comprehensive Project Checklist
+
+## Project: ${prompt}
+## Target Audience: ${targetAudience}
+
+## Pre-Project Planning
+- [ ] Define project scope and objectives
+- [ ] Identify stakeholders and team members
+- [ ] Set timeline and milestones
+- [ ] Allocate budget and resources
+- [ ] Risk assessment and mitigation plan
+
+## Development Phase
+- [ ] Requirements gathering and documentation
+- [ ] Design and architecture planning
+- [ ] Development environment setup
+- [ ] Code implementation and testing
+- [ ] Quality assurance and review
+
+## Deployment Phase
+- [ ] Production environment preparation
+- [ ] Data migration and backup
+- [ ] Security and performance testing
+- [ ] User acceptance testing
+- [ ] Go-live planning and execution
+
+## Post-Launch Activities
+- [ ] Performance monitoring setup
+- [ ] User feedback collection
+- [ ] Documentation and training materials
+- [ ] Maintenance and support planning
+- [ ] Success metrics and ROI analysis
+
+## Emergency Procedures
+- [ ] Backup and recovery procedures
+- [ ] Incident response plan
+- [ ] Communication protocols
+- [ ] Escalation procedures
+
+## Success Metrics
+- Project completion on time and budget
+- Stakeholder satisfaction ratings
+- System performance benchmarks
+- User adoption and engagement rates`,
+
+      "script": `# Automation Script Collection
+
+## Target Audience: ${targetAudience}
+
+## Script Categories
+
+### Productivity Scripts
+- Email automation workflows
+- File organization and backup
+- Task management integration
+- Calendar and scheduling automation
+
+### Data Processing Scripts
+- CSV import/export automation
+- Data validation and cleaning
+- Report generation scripts
+- Database maintenance tasks
+
+### Web Scraping Scripts
+- Content aggregation tools
+- Price monitoring systems
+- Social media data collection
+- News and trend tracking
+
+### API Integration Scripts
+- Third-party service connections
+- Data synchronization tools
+- Notification and alert systems
+- Workflow automation pipelines
+
+## Technical Specifications
+- **Language**: Python 3.8+
+- **Dependencies**: Standard library + popular packages
+- **Platform**: Cross-platform compatibility
+- **Documentation**: Comprehensive README files
+
+## Key Features
+- **Error Handling**: Robust error management
+- **Logging**: Detailed execution logs
+- **Configuration**: Easy setup and customization
+- **Security**: Safe credential management
+
+## Package Contents
+- 15+ ready-to-use scripts
+- Installation and setup guide
+- Configuration templates
+- Troubleshooting documentation
+
+## Learning Resources
+- Video tutorials for each script
+- Code walkthroughs and explanations
+- Customization examples
+- Best practices guide`,
+
+      "analysis": `# Market Analysis Report
+
+## Industry: ${prompt}
+## Target Audience: ${targetAudience}
+
+## Executive Summary
+Comprehensive analysis of market trends, opportunities, and competitive landscape.
+
+## Market Overview
+- **Total Market Size**: Current valuation and growth rate
+- **Key Segments**: Major market divisions and their characteristics
+- **Geographic Distribution**: Regional market variations
+- **Growth Drivers**: Primary factors influencing market expansion
+
+## Competitive Analysis
+- **Major Players**: Top 10 companies and their market share
+- **Competitive Advantages**: Key differentiators and strengths
+- **Market Entry Barriers**: Challenges for new entrants
+- **SWOT Analysis**: Industry-wide strengths, weaknesses, opportunities, threats
+
+## Consumer Insights
+- **Target Demographics**: Age, income, location, interests
+- **Buying Behavior**: Decision-making processes and preferences
+- **Pain Points**: Common customer challenges and frustrations
+- **Purchase Channels**: Online vs offline preferences
+
+## Technology Trends
+- **Emerging Technologies**: Innovations shaping the industry
+- **Digital Transformation**: Adoption rates and impact
+- **Automation Opportunities**: Areas for efficiency improvement
+- **Data Analytics**: Usage patterns and insights
+
+## Regulatory Environment
+- **Current Regulations**: Existing laws and compliance requirements
+- **Upcoming Changes**: Anticipated regulatory developments
+- **Compliance Costs**: Financial impact of regulatory compliance
+- **Industry Standards**: Best practices and benchmarks
+
+## Investment Opportunities
+- **Growth Sectors**: High-potential market segments
+- **M&A Activity**: Recent mergers and acquisitions
+- **Venture Capital**: Investment trends and funding patterns
+- **ROI Projections**: Expected returns on investment
+
+## Strategic Recommendations
+1. **Market Entry Strategy**: Optimal approach for new market entrants
+2. **Product Development**: Features and capabilities in high demand
+3. **Marketing Strategy**: Effective channels and messaging
+4. **Partnership Opportunities**: Strategic alliances and collaborations
+
+## Methodology
+- **Data Sources**: Primary and secondary research methods
+- **Sample Size**: Survey and interview participant counts
+- **Time Period**: Analysis timeframe and data currency
+- **Validation**: Quality assurance and data verification processes
+
+## Limitations and Assumptions
+- Data availability and accuracy considerations
+- Market volatility and uncertainty factors
+- Geographic scope and coverage limitations
+- Future projection assumptions and caveats`
+    }
+
+    return templates[productType as keyof typeof templates] || `# Custom Content Product
+
+## Product Type: ${productType}
+## Target Audience: ${targetAudience}
+## Description: ${prompt}
+
+## Overview
+This custom content product has been tailored to meet your specific requirements and target audience needs.
+
+## Key Features
+- **Customized Content**: Specifically designed for your use case
+- **Professional Quality**: High standards of writing and presentation
+- **Practical Value**: Immediate actionable insights and information
+- **Flexible Format**: Adaptable to your preferred delivery method
+
+## Content Structure
+1. **Introduction**: Context and background information
+2. **Main Content**: Core material and key information
+3. **Practical Applications**: Real-world usage examples
+4. **Conclusion**: Summary and next steps
+
+## Delivery Options
+- Digital download (PDF, Word, etc.)
+- Web-based access
+- Physical delivery (print materials)
+- Custom integration (API, embed codes)
+
+## Support and Resources
+- Implementation guide
+- FAQ and troubleshooting
+- Contact information for support
+- Update and revision policy
+
+## Terms and Conditions
+- License and usage rights
+- Refund and return policy
+- Intellectual property considerations
+- Maintenance and update commitments`
   }
 
   return (

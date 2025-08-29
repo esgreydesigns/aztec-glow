@@ -13,10 +13,12 @@ import {
   Palette,
   Brain,
   Zap,
+  File,
 } from "lucide-react"
 
 const contentCategories = [
   { id: "templates", name: "Templates", icon: FileText, description: "Documents, forms, layouts" },
+  { id: "documents", name: "Digital Documents", icon: File, description: "PDFs, reports, contracts" },
   { id: "images", name: "Images", icon: ImageIcon, description: "Graphics, illustrations, art" },
   { id: "videos", name: "Videos", icon: Video, description: "Animations, clips, tutorials" },
   { id: "puzzles", name: "Puzzles", icon: Puzzle, description: "Brain teasers, logic games" },
@@ -40,8 +42,8 @@ export function Sidebar({ activeCategory, onCategoryChange }: SidebarProps) {
     <div className="w-64 h-screen bg-sidebar border-r border-sidebar-border sidebar-3d flex flex-col">
       {/* Header */}
       <div className="p-6 border-b border-sidebar-border">
-        <h1 className="text-xl font-serif font-bold text-sidebar-foreground">ContentCraft AI</h1>
-        <p className="text-sm text-sidebar-foreground/70 mt-1">Generate anything</p>
+        <h1 className="text-xl font-serif font-bold text-sidebar-foreground">Acrylic Alchemy</h1>
+        <p className="text-sm text-sidebar-foreground/70 mt-1">Content Creation Studio</p>
       </div>
 
       {/* Categories */}
