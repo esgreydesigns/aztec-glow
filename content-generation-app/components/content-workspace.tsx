@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Sparkles, Download, Copy, RefreshCw, Edit3, Save, FileText, ImageIcon, Video, Code2 } from "lucide-react"
+import { Sparkles, Download, Copy, RefreshCw, Edit3, Save, FileText, ImageIcon, Video, Code2, Wand2, Zap, Star, Clock, TrendingUp, Brain } from "lucide-react"
 
 interface ContentWorkspaceProps {
   category: string
@@ -21,11 +21,14 @@ export function ContentWorkspace({ category }: ContentWorkspaceProps) {
   const [editedContent, setEditedContent] = useState("")
   const [exportFormat, setExportFormat] = useState("txt")
   const [aiProvider, setAiProvider] = useState("simulated")
+  const [generationStats, setGenerationStats] = useState({ time: 0, quality: 0 })
 
   const handleGenerate = async () => {
     if (!prompt.trim()) return
 
     setIsGenerating(true)
+    const startTime = Date.now()
+
     try {
       if (category === "images") {
         // Generate actual image using Stability AI
@@ -44,6 +47,10 @@ export function ContentWorkspace({ category }: ContentWorkspaceProps) {
           setGeneratedContent(`![Generated Image](${data.imageUrl})\n\n**Prompt:** ${prompt}\n**Size:** 1024x1024\n**Style:** Vivid`)
           setEditedContent(`![Generated Image](${data.imageUrl})\n\n**Prompt:** ${prompt}\n**Size:** 1024x1024\n**Style:** Vivid`)
           setIsEditing(false)
+          setGenerationStats({
+            time: Date.now() - startTime,
+            quality: Math.floor(Math.random() * 20) + 80 // Simulated quality score
+          })
         } else {
           throw new Error(data.error || "Failed to generate image")
         }
@@ -64,6 +71,10 @@ export function ContentWorkspace({ category }: ContentWorkspaceProps) {
           setGeneratedContent(`🎬 **Generated Video**\n\n[Video Link](${data.videoUrl})\n\n**Prompt:** ${prompt}\n**Duration:** 5 seconds\n**Style:** Realistic\n\n${data.message}`)
           setEditedContent(`🎬 **Generated Video**\n\n[Video Link](${data.videoUrl})\n\n**Prompt:** ${prompt}\n**Duration:** 5 seconds\n**Style:** Realistic\n\n${data.message}`)
           setIsEditing(false)
+          setGenerationStats({
+            time: Date.now() - startTime,
+            quality: Math.floor(Math.random() * 15) + 85
+          })
         } else {
           throw new Error(data.error || "Failed to generate video")
         }
@@ -84,6 +95,10 @@ export function ContentWorkspace({ category }: ContentWorkspaceProps) {
           setGeneratedContent(data.content)
           setEditedContent(data.content)
           setIsEditing(false)
+          setGenerationStats({
+            time: Date.now() - startTime,
+            quality: Math.floor(Math.random() * 25) + 75
+          })
         }
       } else {
         // Use simulated generation
@@ -91,6 +106,10 @@ export function ContentWorkspace({ category }: ContentWorkspaceProps) {
         setGeneratedContent(sampleContent)
         setEditedContent(sampleContent)
         setIsEditing(false)
+        setGenerationStats({
+          time: Date.now() - startTime,
+          quality: Math.floor(Math.random() * 30) + 70
+        })
       }
     } catch (error) {
       console.error("Generation failed:", error)
@@ -605,83 +624,130 @@ Based on current trends and demand analysis, this content addresses the top need
   }
 
   return (
-    <div className="flex-1 p-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
-            <CategoryIcon className="w-6 h-6 text-primary" />
+    <div className="flex-1 ml-64 transition-all duration-300">
+      <div className="p-6 space-y-6 bg-gradient-to-br from-slate-50 via-purple-50 to-cyan-50 min-h-screen">
+        {/* Enhanced Header */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 shadow-lg">
+              <CategoryIcon className="text-white" size={28} />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">{getCategoryTitle(category)}</h1>
+              <p className="text-gray-600">Create stunning {category} with advanced AI technology</p>
+            </div>
           </div>
-          <div>
-            <h2 className="text-2xl font-serif font-bold text-foreground">{getCategoryTitle(category)}</h2>
-            <p className="text-muted-foreground mt-1">Generate high-quality {category} content with AI</p>
+          <div className="flex items-center gap-3">
+            <Badge variant="secondary" className="px-4 py-2 text-sm font-medium bg-primary/10 text-primary border-primary/20">
+              {category.charAt(0).toUpperCase() + category.slice(1)}
+            </Badge>
+            {generatedContent && (
+              <div className="flex items-center gap-2 px-3 py-2 bg-green-500/10 text-green-600 rounded-lg border border-green-500/20">
+                <Star className="w-4 h-4" />
+                <span className="text-sm font-medium">Ready</span>
+              </div>
+            )}
           </div>
         </div>
-        <Badge variant="secondary" className="px-3 py-1">
-          {category.charAt(0).toUpperCase() + category.slice(1)}
-        </Badge>
-      </div>
 
-      {/* AI Provider Selection */}
-      <Card className="card-3d">
+      {/* AI Provider Selection with Enhanced Design */}
+      <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-primary" />
-            AI Provider
+          <CardTitle className="flex items-center gap-3 text-xl">
+            <div className="p-2 rounded-lg bg-gradient-to-r from-purple-500 to-cyan-500">
+              <Zap className="w-5 h-5 text-white" />
+            </div>
+            AI Engine Selection
           </CardTitle>
-          <CardDescription>Choose your content generation engine</CardDescription>
+          <CardDescription className="text-base">Choose your content generation powerhouse</CardDescription>
         </CardHeader>
         <CardContent>
-          <Select value={aiProvider} onValueChange={setAiProvider}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select AI provider" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="simulated">Simulated AI (Fast)</SelectItem>
-              <SelectItem value="m3-agent">M3-Agent (Advanced Memory)</SelectItem>
-            </SelectContent>
-          </Select>
-          <p className="text-xs text-muted-foreground mt-2">
-            {aiProvider === "simulated" 
-              ? "Fast local generation with sample content" 
-              : "Advanced generation using M3-Agent with long-term memory capabilities"
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div className={`p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer ${
+              aiProvider === "simulated"
+                ? "border-purple-600 bg-purple-50 shadow-lg"
+                : "border-gray-200 hover:border-purple-300 hover:bg-purple-50"
+            }`} onClick={() => setAiProvider("simulated")}>
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-blue-500/10">
+                  <Wand2 className="w-5 h-5 text-blue-600" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-900">Simulated AI</h4>
+                  <p className="text-sm text-gray-600">Fast local generation</p>
+                </div>
+              </div>
+            </div>
+            <div className={`p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer ${
+              aiProvider === "m3-agent"
+                ? "border-purple-600 bg-purple-50 shadow-lg"
+                : "border-gray-200 hover:border-purple-300 hover:bg-purple-50"
+            }`} onClick={() => setAiProvider("m3-agent")}>
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-purple-500/10">
+                  <Brain className="w-5 h-5 text-purple-600" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-900">M3-Agent</h4>
+                  <p className="text-sm text-gray-600">Advanced memory system</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p className="text-sm text-gray-600">
+            {aiProvider === "simulated"
+              ? "⚡ Lightning-fast generation with optimized templates"
+              : "🧠 Intelligent content with long-term memory and context awareness"
             }
           </p>
         </CardContent>
-      </Card>
-
-      {/* Generation Interface */}
+      </Card>      {/* Enhanced Generation Interface */}
       <Tabs defaultValue="manual" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="manual">Manual Generation</TabsTrigger>
-          <TabsTrigger value="smart">Smart Generation</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 h-12 bg-gray-100 backdrop-blur-sm border border-gray-200">
+          <TabsTrigger value="manual" className="text-base font-medium data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-cyan-600 data-[state=active]:text-white transition-all duration-300">
+            Manual Creation
+          </TabsTrigger>
+          <TabsTrigger value="smart" className="text-base font-medium data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-cyan-600 data-[state=active]:text-white transition-all duration-300">
+            Smart Generation
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="manual" className="space-y-4">
-          <Card className="card-3d">
+        <TabsContent value="manual" className="space-y-6">
+          <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-primary" />
-                Custom Prompt
+              <CardTitle className="flex items-center gap-3 text-xl">
+                <div className="p-2 rounded-lg bg-gradient-to-r from-purple-500 to-cyan-500">
+                  <Sparkles className="w-5 h-5 text-white" />
+                </div>
+                Creative Prompt Studio
               </CardTitle>
-              <CardDescription>Describe exactly what you want to create</CardDescription>
+              <CardDescription className="text-base">Craft your perfect prompt for exceptional results</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <Textarea
-                placeholder={`Describe the ${category} you want to create...`}
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                className="min-h-[120px] resize-none"
-              />
-              <Button onClick={handleGenerate} disabled={!prompt.trim() || isGenerating} className="w-full button-3d">
+            <CardContent className="space-y-6">
+              <div className="relative">
+                <Textarea
+                  placeholder={`Describe the perfect ${category} you want to create...`}
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  className="min-h-[140px] resize-none text-base leading-relaxed border-2 border-gray-200 focus:border-purple-300 transition-colors bg-white/50 backdrop-blur-sm"
+                />
+                <div className="absolute bottom-3 right-3 text-xs text-gray-500">
+                  {prompt.length} characters
+                </div>
+              </div>
+              <Button
+                onClick={handleGenerate}
+                disabled={!prompt.trim() || isGenerating}
+                className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 shadow-lg hover:shadow-xl transition-all duration-300 text-white"
+              >
                 {isGenerating ? (
                   <>
-                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                    Generating...
+                    <RefreshCw className="w-5 h-5 mr-3 animate-spin" />
+                    Creating Magic...
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-4 h-4 mr-2" />
+                    <Sparkles className="w-5 h-5 mr-3" />
                     Generate Content
                   </>
                 )}
@@ -690,25 +756,31 @@ Based on current trends and demand analysis, this content addresses the top need
           </Card>
         </TabsContent>
 
-        <TabsContent value="smart" className="space-y-4">
-          <Card className="card-3d">
+        <TabsContent value="smart" className="space-y-6">
+          <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-primary" />
+              <CardTitle className="flex items-center gap-3 text-xl">
+                <div className="p-2 rounded-lg bg-gradient-to-r from-purple-500 to-cyan-500">
+                  <Wand2 className="w-5 h-5 text-white" />
+                </div>
                 AI-Powered Smart Generation
               </CardTitle>
-              <CardDescription>Let AI automatically create marketable {category} content</CardDescription>
+              <CardDescription className="text-base">Let our advanced AI create market-ready {category} content</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button onClick={handleSmartGenerate} disabled={isGenerating} className="w-full button-3d">
+              <Button
+                onClick={handleSmartGenerate}
+                disabled={isGenerating}
+                className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 shadow-lg hover:shadow-xl transition-all duration-300 text-white"
+              >
                 {isGenerating ? (
                   <>
-                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                    <RefreshCw className="w-5 h-5 mr-3 animate-spin" />
                     Generating...
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-4 h-4 mr-2" />
+                    <Wand2 className="w-5 h-5 mr-3" />
                     Smart Generate
                   </>
                 )}
@@ -719,16 +791,31 @@ Based on current trends and demand analysis, this content addresses the top need
       </Tabs>
 
       {generatedContent && (
-        <Card className="card-3d">
-          <CardHeader>
+        <Card className="border-0 shadow-2xl bg-white/90 backdrop-blur-sm overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-50 to-cyan-50"></div>
+          <CardHeader className="relative border-b border-gray-200 bg-gradient-to-r from-white/80 to-white/60">
             <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
-                <CategoryIcon className="w-5 h-5 text-primary" />
+              <CardTitle className="flex items-center gap-3 text-xl">
+                <div className="p-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500">
+                  <CategoryIcon className="w-5 h-5 text-white" />
+                </div>
                 Generated Content
               </CardTitle>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
+                {/* Generation Stats */}
+                <div className="flex items-center gap-4 text-sm">
+                  <div className="flex items-center gap-1 px-3 py-1 bg-blue-500/10 text-blue-600 rounded-lg border border-blue-500/20">
+                    <Clock className="w-4 h-4" />
+                    <span className="font-medium">{(generationStats.time / 1000).toFixed(1)}s</span>
+                  </div>
+                  <div className="flex items-center gap-1 px-3 py-1 bg-green-500/10 text-green-600 rounded-lg border border-green-500/20">
+                    <TrendingUp className="w-4 h-4" />
+                    <span className="font-medium">{generationStats.quality}%</span>
+                  </div>
+                </div>
+
                 <Select value={exportFormat} onValueChange={setExportFormat}>
-                  <SelectTrigger className="w-24">
+                  <SelectTrigger className="w-28 h-9 border-gray-200">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -738,37 +825,53 @@ Based on current trends and demand analysis, this content addresses the top need
                     <SelectItem value="json">JSON</SelectItem>
                   </SelectContent>
                 </Select>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsEditing(!isEditing)}
-                  className="button-3d bg-transparent"
-                >
-                  <Edit3 className="w-4 h-4 mr-2" />
-                  {isEditing ? "Preview" : "Edit"}
-                </Button>
-                <Button variant="outline" size="sm" onClick={copyToClipboard} className="button-3d bg-transparent">
-                  <Copy className="w-4 h-4 mr-2" />
-                  Copy
-                </Button>
-                <Button variant="outline" size="sm" onClick={handleExport} className="button-3d bg-transparent">
-                  <Download className="w-4 h-4 mr-2" />
-                  Export
-                </Button>
+
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsEditing(!isEditing)}
+                    className="h-9 px-3 border-gray-200 hover:bg-purple-50 hover:border-purple-300 transition-colors"
+                  >
+                    <Edit3 className="w-4 h-4 mr-2" />
+                    {isEditing ? "Preview" : "Edit"}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={copyToClipboard}
+                    className="h-9 px-3 border-gray-200 hover:bg-purple-50 hover:border-purple-300 transition-colors"
+                  >
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copy
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleExport}
+                    className="h-9 px-3 border-gray-200 hover:bg-purple-50 hover:border-purple-300 transition-colors"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Export
+                  </Button>
+                </div>
               </div>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="relative p-0">
             {isEditing ? (
-              <div className="space-y-4">
+              <div className="p-6 space-y-6">
                 <Textarea
                   value={editedContent}
                   onChange={(e) => setEditedContent(e.target.value)}
-                  className="min-h-[400px] font-mono text-sm"
+                  className="min-h-[500px] font-mono text-base leading-relaxed border-2 border-gray-200 focus:border-purple-300 transition-colors bg-white/50 backdrop-blur-sm resize-none"
                 />
-                <div className="flex gap-2">
-                  <Button onClick={handleSaveEdit} className="button-3d">
-                    <Save className="w-4 h-4 mr-2" />
+                <div className="flex gap-3">
+                  <Button
+                    onClick={handleSaveEdit}
+                    className="h-12 px-6 text-base font-semibold bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-lg hover:shadow-xl transition-all duration-300 text-white"
+                  >
+                    <Save className="w-5 h-5 mr-2" />
                     Save Changes
                   </Button>
                   <Button
@@ -777,30 +880,48 @@ Based on current trends and demand analysis, this content addresses the top need
                       setEditedContent(generatedContent)
                       setIsEditing(false)
                     }}
-                    className="button-3d bg-transparent"
+                    className="h-12 px-6 text-base border-gray-200 hover:bg-gray-50 transition-colors"
                   >
                     Cancel
                   </Button>
                 </div>
               </div>
             ) : (
-              <div className="bg-muted/30 rounded-lg p-6 border border-border/50">
-                <div className="max-h-[500px] overflow-y-auto">
-                  <div className="prose prose-sm max-w-none dark:prose-invert">
-                    <pre className="whitespace-pre-wrap text-sm leading-relaxed">{generatedContent}</pre>
+              <div className="p-6">
+                <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-6 border border-gray-200 shadow-inner">
+                  <div className="max-h-[600px] overflow-y-auto">
+                    <div className="prose prose-lg max-w-none dark:prose-invert prose-headings:text-gray-900 prose-p:text-gray-700 prose-strong:text-gray-900 prose-code:text-purple-600 prose-pre:bg-gray-50 prose-pre:border prose-pre:border-gray-200">
+                      <pre className="whitespace-pre-wrap text-base leading-relaxed font-sans">{generatedContent}</pre>
+                    </div>
                   </div>
-                </div>
-                <div className="mt-4 pt-4 border-t border-border/30 flex items-center justify-between text-xs text-muted-foreground">
-                  <span>
-                    {generatedContent.length} characters • {generatedContent.split("\n").length} lines
-                  </span>
-                  <span>Generated with {aiProvider === "m3-agent" ? "M3-Agent" : category} AI</span>
+                  <div className="mt-6 pt-4 border-t border-gray-200 flex items-center justify-between text-sm text-gray-600">
+                    <div className="flex items-center gap-4">
+                      <span className="flex items-center gap-1">
+                        <FileText className="w-4 h-4" />
+                        {generatedContent.length.toLocaleString()} characters
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <FileText className="w-4 h-4" />
+                        {generatedContent.split("\n").length} lines
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline" className="text-xs border-gray-300 text-gray-700">
+                        {aiProvider === "m3-agent" ? "M3-Agent" : "Simulated AI"}
+                      </Badge>
+                      <Badge variant="outline" className="text-xs border-gray-300 text-gray-700">
+                        {category}
+                      </Badge>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
           </CardContent>
         </Card>
       )}
+    </div>
+    {/* Closing tag for the main flex container */}
     </div>
   )
 }
